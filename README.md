@@ -1,3 +1,5 @@
+<img src="docs/img/icon.png" width="96" alt="VRCLogAnalyzer のアイコン">
+
 # VRCLogAnalyzer
 
 VRChat のログ（`output_log_*.txt`）を解析し、次の情報をデータベースに記録して条件検索できる Windows アプリ（WPF）です。

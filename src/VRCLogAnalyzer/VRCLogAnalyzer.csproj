@@ -4,6 +4,8 @@
     <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- アイコンは tools/make_icon.py で生成 -->
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\VRCLogAnalyzer.Core\VRCLogAnalyzer.Core.csproj" />

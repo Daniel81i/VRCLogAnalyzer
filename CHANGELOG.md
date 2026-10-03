@@ -33,6 +33,7 @@ sechiro 氏の [VRCLogAnalyzer](https://github.com/sechiro/VRCLogAnalyzer) v1.0.
 - 起動時にデータベースを確認し、旧形式・古い構造なら移行前に自動バックアップ、新しいバージョンの DB や認識できないファイルは開かずに終了
 - 認識できない起動オプションがある場合は何もせずに終了（`-analyze` / `--analyze` 形式にも対応）
 - 現在使用中のデータベースファイルの場所を設定画面に表示
+- アプリのアイコンを追加（`tools/make_icon.py` で生成）
 
 ### その他
 

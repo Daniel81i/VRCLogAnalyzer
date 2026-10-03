@@ -1,0 +1,118 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <!-- English. When adding a key, also add it to Strings.ja.xaml -->
+
+  <sys:String x:Key="Common.OK">OK</sys:String>
+  <sys:String x:Key="Common.Cancel">Cancel</sys:String>
+
+  <!-- Menu -->
+  <sys:String x:Key="Menu.File">_File</sys:String>
+  <sys:String x:Key="Menu.Update">_Update data</sys:String>
+  <sys:String x:Key="Menu.Export">_Export results to CSV...</sys:String>
+  <sys:String x:Key="Menu.ShowDetail">Show _details</sys:String>
+  <sys:String x:Key="Menu.Settings">_Settings...</sys:String>
+  <sys:String x:Key="Menu.Exit">E_xit</sys:String>
+  <sys:String x:Key="Menu.Help">_Help</sys:String>
+  <sys:String x:Key="Menu.FirstHelp">_Getting started</sys:String>
+  <sys:String x:Key="Menu.Readme">_README (opens browser)</sys:String>
+  <sys:String x:Key="Menu.Credit">_Credits</sys:String>
+
+  <!-- Filters -->
+  <sys:String x:Key="Filter.StartDate">From:</sys:String>
+  <sys:String x:Key="Filter.EndDate">To:</sys:String>
+  <sys:String x:Key="Range.Today">Today</sys:String>
+  <sys:String x:Key="Range.Week">7 days</sys:String>
+  <sys:String x:Key="Range.Month">30 days</sys:String>
+  <sys:String x:Key="Range.All">All</sys:String>
+  <sys:String x:Key="Filter.User">User:</sys:String>
+  <sys:String x:Key="Filter.World">World:</sys:String>
+  <sys:String x:Key="Filter.Keyword">Keyword:</sys:String>
+  <sys:String x:Key="Filter.NameTooltip">Partial match (case-insensitive for Latin letters)</sys:String>
+  <sys:String x:Key="Filter.KeywordTooltip">Partial match across world/user names, IDs, video URLs and error messages</sys:String>
+  <sys:String x:Key="Filter.ExcludeSelf">Exclude myself</sys:String>
+  <sys:String x:Key="Filter.GroupByVisit">Group by world visit</sys:String>
+  <sys:String x:Key="Filter.Search">Search</sys:String>
+
+  <!-- Event types -->
+  <sys:String x:Key="EventType.WorldEnter">World enter</sys:String>
+  <sys:String x:Key="EventType.WorldLeave">World leave</sys:String>
+  <sys:String x:Key="EventType.PlayerJoin">Join</sys:String>
+  <sys:String x:Key="EventType.PlayerLeave">Leave</sys:String>
+  <sys:String x:Key="EventType.Video">Video</sys:String>
+  <sys:String x:Key="EventType.Invite">Invite</sys:String>
+  <sys:String x:Key="EventType.RequestInvite">Invite request</sys:String>
+  <sys:String x:Key="EventType.Error">Error</sys:String>
+
+  <!-- List -->
+  <sys:String x:Key="Column.Time">Time</sys:String>
+  <sys:String x:Key="Column.Type">Type</sys:String>
+  <sys:String x:Key="Column.World">World</sys:String>
+  <sys:String x:Key="Column.User">User</sys:String>
+  <sys:String x:Key="Column.Detail">Detail</sys:String>
+  <sys:String x:Key="Group.BeforeEnter">(Before entering a world)</sys:String>
+
+  <sys:String x:Key="Ctx.CopyUser">Copy user name</sys:String>
+  <sys:String x:Key="Ctx.CopyWorld">Copy world name</sys:String>
+  <sys:String x:Key="Ctx.CopyDetail">Copy detail</sys:String>
+  <sys:String x:Key="Ctx.CopyRows">Copy selected rows (tab-separated)</sys:String>
+  <sys:String x:Key="Ctx.FilterUser">Filter by this user</sys:String>
+  <sys:String x:Key="Ctx.FilterWorld">Filter by this world</sys:String>
+  <sys:String x:Key="Ctx.OpenWorld">Open world page</sys:String>
+  <sys:String x:Key="Ctx.OpenUser">Open user page</sys:String>
+  <sys:String x:Key="Ctx.OpenVideo">Open video URL</sys:String>
+
+  <sys:String x:Key="Detail.World">World: </sys:String>
+  <sys:String x:Key="Detail.User">User: </sys:String>
+  <sys:String x:Key="Detail.Self">  [me]</sys:String>
+
+  <!-- Status ({0} etc. are format placeholders) -->
+  <sys:String x:Key="Status.Checking">Checking logs…</sys:String>
+  <sys:String x:Key="Status.Importing">Importing logs… ({0}/{1})</sys:String>
+  <sys:String x:Key="Status.ImportDone">Import finished: {0} new events ({2} of {1} log files unchanged).</sys:String>
+  <sys:String x:Key="Status.LegacyMigrated">Migrated {0} rows from the previous version.</sys:String>
+  <sys:String x:Key="Status.ImportFailed">Failed to import logs: {0}</sys:String>
+  <sys:String x:Key="Status.Count">{0:N0} events</sys:String>
+  <sys:String x:Key="Status.Truncated">More than {0:N0} events matched; only the first {0:N0} are shown. Please narrow the filters.</sys:String>
+  <sys:String x:Key="Status.Copied">Copied: {0}</sys:String>
+  <sys:String x:Key="Status.CopyFailed">Could not copy to the clipboard. Another app may be using it.</sys:String>
+
+  <sys:String x:Key="Export.Filter">CSV files|*.csv|All files|*.*</sys:String>
+  <sys:String x:Key="Export.Done">Exported {0:N0} events to CSV.</sys:String>
+  <sys:String x:Key="Export.Failed" xml:space="preserve">Could not write the CSV file.&#10;{0}</sys:String>
+
+  <sys:String x:Key="Error.Unexpected" xml:space="preserve">An unexpected error occurred.&#10;{0}&#10;&#10;See VRCLogAnalyzer.log for details.</sys:String>
+
+  <!-- Database safety checks -->
+  <sys:String x:Key="Db.BackupNotice" xml:space="preserve">A database from a previous version (or an older format) was found and has been migrated to the new format.&#10;The database before migration was backed up to:&#10;&#10;{0}&#10;&#10;The migrated database will be used from now on. Once you have confirmed that the new version works fine, you may delete the backup.</sys:String>
+  <sys:String x:Key="Db.Newer" xml:space="preserve">This database was created by a newer version of VRCLogAnalyzer.&#10;To avoid damaging your data, this version will exit without opening it. Please use the latest version of the app.&#10;&#10;{0}</sys:String>
+  <sys:String x:Key="Db.Unrecognized" xml:space="preserve">This file is not recognized as a VRCLogAnalyzer database.&#10;To avoid damaging it, the app will exit without opening it.&#10;&#10;{0}&#10;&#10;Move the file elsewhere, or change the database location in the settings file (VRCLogAnalyzer.config).</sys:String>
+  <sys:String x:Key="Args.Unknown" xml:space="preserve">Exiting without doing anything because of unrecognized command-line options.&#10;&#10;{0}&#10;&#10;Available options: /analyze, /db &lt;path&gt;, /logdir &lt;path&gt; (-analyze and --analyze forms are also accepted)</sys:String>
+
+  <!-- Settings -->
+  <sys:String x:Key="Settings.Title">Settings</sys:String>
+  <sys:String x:Key="Settings.DbLocation">Database location</sys:String>
+  <sys:String x:Key="Settings.MyDocuments">VRCLogAnalyzer folder in Documents (recommended)</sys:String>
+  <sys:String x:Key="Settings.AppPath">Same folder as the application</sys:String>
+  <sys:String x:Key="Settings.DbNote">Note: to keep your data after changing the location, move "VRCLogAnalyzer.db" from the old folder to the new one.</sys:String>
+  <sys:String x:Key="Settings.CurrentDb">Database file currently in use:</sys:String>
+  <sys:String x:Key="Settings.LogDir">VRChat log folder</sys:String>
+  <sys:String x:Key="Settings.Browse">Browse...</sys:String>
+  <sys:String x:Key="Settings.LogDirDefault">If empty, the default folder is used: {0}</sys:String>
+  <sys:String x:Key="Settings.Language">表示言語 / Language</sys:String>
+  <sys:String x:Key="Settings.LanguageAuto">Automatic (follow Windows)</sys:String>
+  <sys:String x:Key="Settings.SaveFailed" xml:space="preserve">Could not save the settings file.&#10;{0}</sys:String>
+
+  <!-- Help / credits -->
+  <sys:String x:Key="Help.Title">Getting started</sys:String>
+  <sys:String x:Key="Help.Body" xml:space="preserve">Thank you for using VRCLogAnalyzer!&#10;&#10;This app reads VRChat's log files and records the worlds you visited, users who joined or left your instance, video URLs that were played, errors, and invites you received, so you can search them later.&#10;&#10;Logs are imported automatically when the app starts (after the first time, only new lines are read). To import manually, choose "Update data" from the File menu.&#10;&#10;VRChat deletes its logs after a few days. To keep a continuous history, use Task Scheduler or similar to run "VRCLogAnalyzer.exe /analyze" at least once a day. This imports logs without opening a window.&#10;&#10;If a database from the previous version is in the same location, it is migrated to the new format on the first import (the old tables are kept).&#10;&#10;Have a great time in VRChat!</sys:String>
+  <sys:String x:Key="Credit.Title">Credits</sys:String>
+  <sys:String x:Key="Credit.OriginalHeading">Original author</sys:String>
+  <sys:String x:Key="Credit.OriginalDesc">Author of the original VRCLogAnalyzer. This app is based on it (MIT License), with bug fixes and new features.</sys:String>
+  <sys:String x:Key="Credit.ForksHeading">Forks whose bug fixes were referenced</sys:String>
+  <sys:String x:Key="Credit.ForkTkrDesc">Fix for the list and Search button being hidden when resizing the window</sys:String>
+  <sys:String x:Key="Credit.ForkYuiDesc">Fix for date search not working depending on the locale, .NET 8 support</sys:String>
+  <sys:String x:Key="Credit.LibrariesHeading">Libraries</sys:String>
+  <sys:String x:Key="Credit.DisclaimerHeading">Disclaimer</sys:String>
+  <sys:String x:Key="Credit.DisclaimerBody" xml:space="preserve">This is an unofficial fan-made app and is not affiliated with VRChat Inc.&#10;&#10;It is distributed AS-IS as open source software, and the developers accept no liability for any damage arising from its use.&#10;&#10;Continued operation is not guaranteed if VRChat changes its specifications in the future.</sys:String>
+</ResourceDictionary>

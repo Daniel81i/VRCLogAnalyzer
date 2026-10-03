@@ -348,3 +348,10 @@ Temporary Items
 
 # 作者ローカル環境用のデータ移行スクリプト
 LogAnalyzerMigrator.cs
+# VRCLogAnalyzer: 個人データ・ローカル設定を公開しない
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+output_log_*.txt
+.claude/settings.local.json

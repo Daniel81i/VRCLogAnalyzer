@@ -1,37 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using System.IO;
-
-using System.Data;
-using SQLite;
-using System.Collections.ObjectModel;
 
 namespace VRCLogAnalyzer
 {
-    /// <summary>
-    /// Interaction logic forCreditWindow.xaml
-    /// </summary>
     public partial class CreditWindow : Window
     {
         public CreditWindow()
         {
             InitializeComponent();
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            AppTitle.Text = version == null ? "VRCLogAnalyzer" : $"VRCLogAnalyzer v{version.Major}.{version.Minor}.{version.Build}";
         }
-        public void Button_Click_OK(object sender, RoutedEventArgs e){
-            this.Close();
+
+        private void Link_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            MainWindow.OpenBrowser(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
     }
 }

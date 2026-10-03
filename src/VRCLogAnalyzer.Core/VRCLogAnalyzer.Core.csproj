@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(CoreTargetFramework)</TargetFramework>
+    <RootNamespace>VRCLogAnalyzer.Core</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- 1.11 系は SQLite 3.53 系を同梱（SQLitePCLRaw 2.1.11 以前は CVE-2025-6965 の影響を受ける） -->
+    <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
+    <PackageReference Include="NLog" Version="5.3.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="VRCLogAnalyzer.Core.Tests" />
+  </ItemGroup>
+</Project>

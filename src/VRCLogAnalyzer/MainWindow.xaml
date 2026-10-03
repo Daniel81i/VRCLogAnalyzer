@@ -1,136 +1,203 @@
-﻿<Window x:Class="VRCLogAnalyzer.MainWindow"
+<Window x:Class="VRCLogAnalyzer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VRCLogAnalyzer"
-        mc:Ignorable="d"
         Title="VRCLogAnalyzer"
-        Height="600"
-        Width="800"
-        ResizeMode="CanResizeWithGrip"
+        Height="720"
+        Width="1100"
+        MinHeight="520"
+        MinWidth="880"
+        WindowStartupLocation="CenterScreen"
         ContentRendered="Window_ContentRendered">
-  <Grid>
-    <DockPanel Grid.ColumnSpan="2">
-      <Menu DockPanel.Dock="Top">
-        <MenuItem Header="設定(_S)">
-          <MenuItem Header="データ更新(_U)"
-                    Click="Button_UpdateDb" />
-          <Separator />
-          <MenuItem Header="データ保存場所変更(_S)"
-                    Click="Button_Settings" />
-        </MenuItem>
-        <MenuItem Header="エクスポート(_E)">
-          <MenuItem Header="ユーザーデータ(_U)"
-                    Click="Button_ExportUser" />
-          <MenuItem Header="ワールドデータ(_U)"
-                    Click="Button_ExportWorld" />
-        </MenuItem>
-        <MenuItem Header="ヘルプ(_H)">
-          <MenuItem Header="はじめて利用される方へ(_U)"
-                    Click="Button_FirstHelp" />
-          <MenuItem Header="README(_R)※ブラウザが開きます"
-                    Click="Button_Readme" />
-          <Separator />
-          <MenuItem Header="クレジット(_C)"
-                    Click="Button_Credit" />
-        </MenuItem>
-      </Menu>
-    </DockPanel>
-    <StackPanel>
-      <Grid>
+  <Window.Resources>
+    <local:EventTypeConverter x:Key="EventTypeConverter" />
+    <local:VisitGroupConverter x:Key="VisitGroupConverter" />
+    <Style TargetType="Label">
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Padding" Value="4 0 4 0" />
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="Height" Value="24" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style TargetType="CheckBox">
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Margin" Value="0 2 12 2" />
+    </Style>
+  </Window.Resources>
+
+  <DockPanel>
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="{DynamicResource Menu.File}">
+        <MenuItem x:Name="UpdateMenu" Header="{DynamicResource Menu.Update}" Click="Menu_UpdateDb" />
+        <MenuItem Header="{DynamicResource Menu.Export}" Click="Menu_Export" />
+        <Separator />
+        <MenuItem x:Name="ShowDetailMenu" Header="{DynamicResource Menu.ShowDetail}" IsCheckable="True" Click="Menu_ShowDetail" />
+        <Separator />
+        <MenuItem Header="{DynamicResource Menu.Settings}" Click="Menu_Settings" />
+        <Separator />
+        <MenuItem Header="{DynamicResource Menu.Exit}" Click="Menu_Exit" />
+      </MenuItem>
+      <MenuItem Header="{DynamicResource Menu.Help}">
+        <MenuItem Header="{DynamicResource Menu.FirstHelp}" Click="Menu_FirstHelp" />
+        <MenuItem Header="{DynamicResource Menu.Readme}" Click="Menu_Readme" />
+        <Separator />
+        <MenuItem Header="{DynamicResource Menu.Credit}" Click="Menu_Credit" />
+      </MenuItem>
+    </Menu>
+
+    <StatusBar DockPanel.Dock="Bottom">
+      <StatusBarItem>
+        <TextBlock x:Name="StatusText" />
+      </StatusBarItem>
+    </StatusBar>
+
+    <!-- 検索条件 -->
+    <Border DockPanel.Dock="Top" Padding="8 8 8 4" BorderBrush="LightGray" BorderThickness="0 0 0 1">
+      <Grid KeyDown="Filter_KeyDown">
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="5*" />
-          <ColumnDefinition Width="4*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="160" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="160" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-          <RowDefinition Height="*" />
+          <RowDefinition Height="30" />
+          <RowDefinition Height="30" />
+          <!-- 種別とオプションは狭い幅で折り返しても切れないよう高さを自動にする -->
+          <RowDefinition Height="Auto" MinHeight="26" />
+          <RowDefinition Height="Auto" MinHeight="26" />
         </Grid.RowDefinitions>
-        <StackPanel>
-          <StackPanel Orientation="Horizontal"
-                      Height="40"
-                      Margin="2 20 10 0">
-            <Label x:Name="Label1"
-                   Height="30"
-                   Width="80"
-                   HorizontalContentAlignment="Right"
-                   Content="開始日：" />
-            <DatePicker x:Name="StartDate"
-                        Height="24"
-                        Width="120" />
-            <Label x:Name="Label2"
-                   Height="30"
-                   Width="80"
-                   HorizontalContentAlignment="Right"
-                   Content="終了日：" />
-      　    <DatePicker x:Name="EndDate"
-                        Height="24"
-                        Width="120" />
-          </StackPanel>
-          <StackPanel Orientation="Horizontal"
-                      Height="30"
-                      Margin="2 0 10 4">
-            <Label x:Name="Label3"
-                   Height="24"
-                   Width="80"
-                   HorizontalContentAlignment="Right"
-                   Content="ユーザー名：" />
-            <TextBox x:Name="QueryUsername"
-                     ToolTip="大文字小文字を区別しない部分一致"
-                     Height="24"
-                     Width="120" />
-            <Label x:Name="Label4"
-                   Height="24"
-                   Width="80"
-                   HorizontalContentAlignment="Right"
-                   Content="ワールド名：" />
-            <TextBox x:Name="QueryWorldname"
-                     ToolTip="大文字小文字を区別しない部分一致"
-                     Height="24"
-                     Width="120" />　
-          </StackPanel>
-          </StackPanel>
-          <StackPanel Grid.Column="1"
-                      Grid.RowSpan="2">
-            <Button x:Name="SearchButton"
-                    Height="58"
-                    Width="100"
-                    Margin="0 28 0 10"
-                    HorizontalAlignment="Left"
-                    HorizontalContentAlignment="Center"
-                    Content="検索"
-                    Click="Button_UpdateView" />
-          </StackPanel>
-        </Grid>
-        <TextBlock x:Name="loadingText"
-                   Grid.Row="1"
-                   Grid.ColumnSpan="2"
-                   TextWrapping="Wrap"
-                   Text="ログデータ解析中です。しばらくお待ちください。"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="24"
-                   Visibility="Collapsed" />
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
-                      CanContentScroll="True">
-          <TreeView x:Name="HistoryTree"
-                    Margin="10 0 10 10"
-                    Height="400">
-            <TreeView.ItemTemplate>
-              <HierarchicalDataTemplate DataType="local:Dto"
-                                        ItemsSource="{Binding Dtos}">
-                <TextBlock Text="{Binding Name}"
-                           ToolTip="{Binding Desc}">
-                  <TextBlock.ContextMenu>
-                    <ContextMenu>
-                      <MenuItem Header="名前をコピー" Click="MenuItem_Click" />
-                    </ContextMenu>
-                  </TextBlock.ContextMenu>
-                </TextBlock>
-              </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-          </TreeView>
-        </ScrollViewer>
-      </StackPanel>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource Filter.StartDate}" />
+        <DatePicker Grid.Row="0" Grid.Column="1" x:Name="StartDate" VerticalAlignment="Center" />
+        <Label Grid.Row="0" Grid.Column="2" Content="{DynamicResource Filter.EndDate}" />
+        <DatePicker Grid.Row="0" Grid.Column="3" x:Name="EndDate" VerticalAlignment="Center" />
+        <StackPanel Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="8 0 0 0">
+          <Button Content="{DynamicResource Range.Today}" Padding="8 2" Margin="0 0 4 0" Click="Range_Today" />
+          <Button Content="{DynamicResource Range.Week}" Padding="8 2" Margin="0 0 4 0" Click="Range_Week" />
+          <Button Content="{DynamicResource Range.Month}" Padding="8 2" Margin="0 0 4 0" Click="Range_Month" />
+          <Button Content="{DynamicResource Range.All}" Padding="8 2" Click="Range_All" />
+        </StackPanel>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource Filter.User}" />
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="QueryUsername" ToolTip="{DynamicResource Filter.NameTooltip}" />
+        <Label Grid.Row="1" Grid.Column="2" Content="{DynamicResource Filter.World}" />
+        <TextBox Grid.Row="1" Grid.Column="3" x:Name="QueryWorldname" ToolTip="{DynamicResource Filter.NameTooltip}" />
+        <Label Grid.Row="1" Grid.Column="4" Content="{DynamicResource Filter.Keyword}" Margin="8 0 0 0" />
+        <TextBox Grid.Row="1" Grid.Column="5" x:Name="QueryKeyword"
+                 ToolTip="{DynamicResource Filter.KeywordTooltip}" />
+
+        <WrapPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" VerticalAlignment="Center" Margin="4 2 0 2">
+          <CheckBox x:Name="TypeWorldEnter" Content="{DynamicResource EventType.WorldEnter}" IsChecked="True" />
+          <CheckBox x:Name="TypeWorldLeave" Content="{DynamicResource EventType.WorldLeave}" IsChecked="False" />
+          <CheckBox x:Name="TypePlayerJoin" Content="{DynamicResource EventType.PlayerJoin}" IsChecked="True" />
+          <CheckBox x:Name="TypePlayerLeave" Content="{DynamicResource EventType.PlayerLeave}" IsChecked="True" />
+          <CheckBox x:Name="TypeVideo" Content="{DynamicResource EventType.Video}" IsChecked="False" />
+          <CheckBox x:Name="TypeError" Content="{DynamicResource EventType.Error}" IsChecked="False" />
+          <CheckBox x:Name="TypeInvite" Content="{DynamicResource EventType.Invite}" IsChecked="False" />
+          <CheckBox x:Name="TypeRequestInvite" Content="{DynamicResource EventType.RequestInvite}" IsChecked="False" />
+        </WrapPanel>
+        <WrapPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6" VerticalAlignment="Center" Margin="4 0 0 0">
+          <CheckBox x:Name="ExcludeSelf" Content="{DynamicResource Filter.ExcludeSelf}" IsChecked="True" />
+          <CheckBox x:Name="GroupByVisit" Content="{DynamicResource Filter.GroupByVisit}" IsChecked="True"
+                    Checked="GroupByVisit_Changed" Unchecked="GroupByVisit_Changed" />
+        </WrapPanel>
+
+        <Button Grid.Row="0" Grid.Column="6" Grid.RowSpan="4" x:Name="SearchButton"
+                Content="{DynamicResource Filter.Search}" Width="90" Margin="12 2 0 2" IsDefault="True" Click="Button_Search" />
+      </Grid>
+    </Border>
+
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" MinHeight="120" />
+        <!-- 詳細欄は既定で非表示（ファイル＞詳細表示 で表示）。高さはコードで切り替える -->
+        <RowDefinition x:Name="SplitterRow" Height="0" />
+        <RowDefinition x:Name="DetailRow" Height="0" />
+      </Grid.RowDefinitions>
+
+      <DataGrid x:Name="EventGrid"
+                Grid.Row="0"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                CanUserAddRows="False"
+                HeadersVisibility="Column"
+                GridLinesVisibility="Horizontal"
+                HorizontalGridLinesBrush="#EEE"
+                SelectionMode="Extended"
+                SelectionUnit="FullRow"
+                EnableRowVirtualization="True"
+                VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                VirtualizingPanel.VirtualizationMode="Recycling"
+                VirtualizingPanel.ScrollUnit="Pixel"
+                SelectionChanged="EventGrid_SelectionChanged"
+                SizeChanged="EventGrid_SizeChanged"
+                ContextMenuOpening="EventGrid_ContextMenuOpening"
+                MouseDoubleClick="EventGrid_MouseDoubleClick">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="{DynamicResource Column.Time}" Binding="{Binding Timestamp}" Width="140" />
+          <DataGridTextColumn Header="{DynamicResource Column.Type}" Binding="{Binding EventType, Converter={StaticResource EventTypeConverter}}" Width="90" SortMemberPath="EventType" />
+          <DataGridTextColumn Header="{DynamicResource Column.World}" Binding="{Binding WorldName}" Width="220" />
+          <DataGridTextColumn Header="{DynamicResource Column.User}" Binding="{Binding PlayerName}" Width="180" />
+          <DataGridTextColumn x:Name="DetailColumn" Header="{DynamicResource Column.Detail}" Binding="{Binding DetailSummary}" Width="300" MinWidth="150" />
+        </DataGrid.Columns>
+        <DataGrid.GroupStyle>
+          <GroupStyle>
+            <GroupStyle.ContainerStyle>
+              <Style TargetType="GroupItem">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="GroupItem">
+                      <Expander IsExpanded="True" Background="#F3F6FA" BorderThickness="0" Padding="0">
+                        <Expander.Header>
+                          <TextBlock FontWeight="SemiBold">
+                            <Run Text="{Binding Name, Mode=OneWay, Converter={StaticResource VisitGroupConverter}}" />
+                            <Run Text="  (" Foreground="Gray" /><Run Text="{Binding ItemCount, Mode=OneWay}" Foreground="Gray" /><Run Text=")" Foreground="Gray" />
+                          </TextBlock>
+                        </Expander.Header>
+                        <ItemsPresenter />
+                      </Expander>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </GroupStyle.ContainerStyle>
+          </GroupStyle>
+        </DataGrid.GroupStyle>
+        <DataGrid.ContextMenu>
+          <ContextMenu>
+            <MenuItem x:Name="MenuCopyUser" Header="{DynamicResource Ctx.CopyUser}" Click="Copy_PlayerName" />
+            <MenuItem x:Name="MenuCopyWorld" Header="{DynamicResource Ctx.CopyWorld}" Click="Copy_WorldName" />
+            <MenuItem x:Name="MenuCopyDetail" Header="{DynamicResource Ctx.CopyDetail}" Click="Copy_Detail" />
+            <MenuItem x:Name="MenuCopyRows" Header="{DynamicResource Ctx.CopyRows}" Click="Copy_Rows" />
+            <Separator />
+            <MenuItem x:Name="MenuFilterUser" Header="{DynamicResource Ctx.FilterUser}" Click="Filter_ByPlayer" />
+            <MenuItem x:Name="MenuFilterWorld" Header="{DynamicResource Ctx.FilterWorld}" Click="Filter_ByWorld" />
+            <Separator />
+            <MenuItem x:Name="MenuOpenWorld" Header="{DynamicResource Ctx.OpenWorld}" Click="Open_World" />
+            <MenuItem x:Name="MenuOpenUser" Header="{DynamicResource Ctx.OpenUser}" Click="Open_User" />
+            <MenuItem x:Name="MenuOpenVideo" Header="{DynamicResource Ctx.OpenVideo}" Click="Open_Video" />
+          </ContextMenu>
+        </DataGrid.ContextMenu>
+      </DataGrid>
+
+      <GridSplitter x:Name="DetailSplitter" Grid.Row="1" HorizontalAlignment="Stretch" Background="#DDD" Visibility="Collapsed" />
+
+      <TextBox x:Name="DetailText"
+               Visibility="Collapsed"
+               Grid.Row="2"
+               Height="Auto"
+               IsReadOnly="True"
+               TextWrapping="Wrap"
+               VerticalContentAlignment="Top"
+               VerticalScrollBarVisibility="Auto"
+               FontFamily="Consolas, MS Gothic"
+               BorderThickness="0"
+               Padding="6" />
     </Grid>
-  </Window>
+  </DockPanel>
+</Window>

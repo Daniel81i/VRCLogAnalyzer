@@ -1,0 +1,19 @@
+<Project>
+  <!--
+    ターゲットフレームワークはここで一元管理する。
+    .NET 10（LTS、2028 年 11 月までサポート）。次の LTS へ移行する場合も以下 2 行を変更する。
+  -->
+  <PropertyGroup>
+    <CoreTargetFramework>net10.0</CoreTargetFramework>
+    <AppTargetFramework>net10.0-windows</AppTargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Version>2.0.0</Version>
+    <Authors>sechiro; VRCLogAnalyzer contributors</Authors>
+    <Copyright>Copyright (c) 2021 sechiro</Copyright>
+  </PropertyGroup>
+</Project>

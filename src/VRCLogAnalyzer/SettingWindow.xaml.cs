@@ -1,100 +1,68 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 using System.IO;
-
-using System.Data;
-using SQLite;
-using System.Collections.ObjectModel;
+using System.Windows;
+using Microsoft.Win32;
+using NLog;
+using VRCLogAnalyzer.Core;
 
 namespace VRCLogAnalyzer
 {
-    /// <summary>
-    /// Interaction logic for SettingWindow.xaml
-    /// </summary>
     public partial class SettingWindow : Window
     {
-        private string _appConfigPath;
-        public SettingWindow()
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly AppSettings _settings;
+
+        private sealed record LanguageOption(string Code, string Label);
+
+        /// <param name="currentDatabasePath">現在使用中の DB ファイル（/db 指定時はそのパス）</param>
+        public SettingWindow(AppSettings settings, string currentDatabasePath)
         {
             InitializeComponent();
-            string appPath = App.GetAppPath();
-            _appConfigPath = System.IO.Path.Combine(appPath, "VRCLogAnalyzer.config");
-        }
-        public void Button_Click_OK(object sender, RoutedEventArgs e)
-        {
-            ChangeDbPathConfig();
-            this.Close();
-        }
-        private void Window_ContentRendered(object sender, EventArgs e)
-        {
-            //設定ファイルは必ず同梱し、ファイルがないパターンはいったん想定外にする
-            string? dbPathConfig = "AppPath";
+            _settings = settings;
+            CurrentDbText.Text = currentDatabasePath;
 
-            System.Xml.XmlDocument appConfig = new System.Xml.XmlDocument();
-            appConfig.Load(_appConfigPath);
-            foreach (System.Xml.XmlNode n in appConfig["configuration"]["appSettings"])
+            // 言語名はどの言語で表示中でも読めるよう、その言語自身の表記で固定する
+            LanguageCombo.ItemsSource = new[]
             {
-                if (n.Name == "add")
-                {
-                    if (n.Attributes.GetNamedItem("key").Value == "DbPathChoice")
-                    {
-                        dbPathConfig = n.Attributes.GetNamedItem("value").Value;
-                    }
+                new LanguageOption("", Loc.T("Settings.LanguageAuto")),
+                new LanguageOption("ja", "日本語"),
+                new LanguageOption("en", "English"),
+            };
+            LanguageCombo.SelectedValue = Loc.SupportedLanguages.Contains(settings.Language) ? settings.Language : "";
 
-                }
-            }
-
-            if (dbPathConfig == "MyDocuments")
-            {
-                DbPathConfigMyDocuments.IsChecked = true;
-                DbPathConfigAppPath.IsChecked = false;
-            }
-            else if (dbPathConfig == "AppPath")
-            {
-                DbPathConfigMyDocuments.IsChecked = false;
-                DbPathConfigAppPath.IsChecked = true;
-            }
-
+            DbPathConfigMyDocuments.IsChecked = settings.DbLocation == DbLocation.MyDocuments;
+            DbPathConfigAppPath.IsChecked = settings.DbLocation == DbLocation.AppPath;
+            LogDirText.Text = settings.LogDir;
+            DefaultLogDirText.Text = Loc.F("Settings.LogDirDefault", LogImporter.DefaultLogDirectory);
         }
 
-        public void ChangeDbPathConfig()
+        private void Button_BrowseLogDir(object sender, RoutedEventArgs e)
         {
-            System.Xml.XmlDocument appConfig = new System.Xml.XmlDocument();
-            appConfig.Load(_appConfigPath);
-
-            string? dbPathConfig = App.GetAppPath();
-
-            if ((bool)DbPathConfigMyDocuments.IsChecked == true)
+            var dialog = new OpenFolderDialog
             {
-                dbPathConfig = "MyDocuments";
-            }
-            else if ((bool)DbPathConfigAppPath.IsChecked == true)
+                InitialDirectory = string.IsNullOrWhiteSpace(LogDirText.Text) ? LogImporter.DefaultLogDirectory : LogDirText.Text,
+            };
+            if (dialog.ShowDialog(this) == true)
             {
-                dbPathConfig = "AppPath";
+                LogDirText.Text = dialog.FolderName;
             }
+        }
 
-            foreach (System.Xml.XmlNode n in appConfig["configuration"]["appSettings"])
+        private void Button_Click_OK(object sender, RoutedEventArgs e)
+        {
+            _settings.Language = LanguageCombo.SelectedValue as string ?? "";
+            _settings.DbLocation = DbPathConfigAppPath.IsChecked == true ? DbLocation.AppPath : DbLocation.MyDocuments;
+            _settings.LogDir = LogDirText.Text.Trim();
+            try
             {
-                if (n.Name == "add")
-                {
-                    if (n.Attributes.GetNamedItem("key").Value == "DbPathChoice")
-                        n.Attributes.GetNamedItem("value").Value = dbPathConfig;
-                }
+                _settings.Save();
             }
-            appConfig.Save(_appConfigPath);
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                logger.Error(ex, "Failed to save settings file");
+                MessageBox.Show(this, Loc.F("Settings.SaveFailed", ex.Message), "VRCLogAnalyzer", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            DialogResult = true;
         }
     }
 }

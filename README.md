@@ -14,9 +14,15 @@ VRChat のログ（`output_log_*.txt`）を解析し、次の情報をデータ�
 
 ## 動作環境
 
-- Windows 10 / 11（64bit）
-- .NET 10 デスクトップランタイム（自己完結形式で発行した場合は不要）
+- Windows 11（64bit）の最近のビルドを想定しています
+- .NET のインストールは不要です（実行に必要なものは exe に含まれています）
 - 表示言語: 日本語 / English（既定は Windows の表示言語に合わせます。「ファイル」＞「設定」で切り替えられます）
+
+## 入手方法
+
+GitHub の Releases から `VRCLogAnalyzer-バージョン-win-x64.zip` をダウンロードし、好きなフォルダに展開して `VRCLogAnalyzer.exe` を起動してください。インストールは不要です。
+
+※署名付きアプリではないため、初回起動時に Windows の警告（SmartScreen）が表示されることがあります。配布用の zip は GitHub Actions でこのリポジトリのソースからビルドしています。
 
 ## 使い方
 
@@ -87,13 +93,16 @@ VRCLogAnalyzer.exe /analyze
 ```
 dotnet build
 dotnet test
-dotnet publish src/VRCLogAnalyzer -c Release -r win-x64 --self-contained false
+dotnet publish src/VRCLogAnalyzer -c Release -p:PublishProfile=win-x64 -o artifacts/publish
 ```
+
+- 配布用ビルドの設定は `src/VRCLogAnalyzer/Properties/PublishProfiles/win-x64.pubxml`（ランタイム同梱・exe 1 つ）。GitHub Actions も同じ設定でビルドします。
+- GitHub Actions（`.github/workflows/build.yml`）: main への push でビルドとテスト、`v` で始まるタグ（例: `v2.0.0`）の push で zip を添付した Release を下書きで作成します。
 
 - `src/VRCLogAnalyzer.Core` … ログ解析・データベース・CSV（UI 非依存、テストあり）
 - `src/VRCLogAnalyzer` … WPF アプリ
 - `tests/VRCLogAnalyzer.Core.Tests` … xUnit テスト
-- ターゲットフレームワークは `Directory.Build.props` で一元管理しています。.NET 10 へ移行する場合は `CoreTargetFramework` / `AppTargetFramework` を変更してください。
+- ターゲットフレームワークは `Directory.Build.props` で一元管理しています（現在は .NET 10）。
 
 ## アプリのコンセプト（旧バージョンから継承）
 

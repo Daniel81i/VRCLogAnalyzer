@@ -22,6 +22,8 @@ GitHub に公開するため、以下をリポジトリのファイル・コミ�
 ## ビルド・テスト
 
 - `dotnet build` / `dotnet test`（.NET 10 SDK。TFM は `Directory.Build.props` で一元管理）
+- 配布用ビルド: `dotnet publish src/VRCLogAnalyzer -c Release -p:PublishProfile=win-x64 -o artifacts/publish`（ランタイム同梱・exe 1 つ。`artifacts/` は git 管理外）。GitHub Actions も同じプロファイルを使う。リリースは `v*` タグの push で Release の下書きができる
+- 想定環境は「Windows 11 の最近のビルド」。古い OS 向けの互換対応は考えない
 - 実データで確認する場合は、ユーザーの本番 DB（`~/Documents/VRCLogAnalyzer/VRCLogAnalyzer.db`）に書き込まず、コピーを作って `VRCLogAnalyzer.exe /analyze /db <copy>` を使う
 - **アプリは必ず PowerShell（`Start-Process`）から起動する。** Git Bash は `/analyze` などの `/` で始まる引数をパスに書き換えるため、オプションが効かずに本番 DB を開いてしまう（実際に一度起きた）。現在は不明な引数があると何もせず終了するが、それでも Git Bash からは起動しない
 

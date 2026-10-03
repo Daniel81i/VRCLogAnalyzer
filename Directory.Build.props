@@ -16,4 +16,14 @@
     <Authors>sechiro; VRCLogAnalyzer contributors</Authors>
     <Copyright>Copyright (c) 2021 sechiro</Copyright>
   </PropertyGroup>
+
+  <!-- 配布用ビルド: デバッグ情報は別ファイル（.pdb）にせず DLL/exe に埋め込む。エラー時のログに行番号が出る -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <!-- GitHub Actions でのビルドは決定的にし、埋め込まれるソースのパスからビルド環境のパスを除く -->
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
 </Project>

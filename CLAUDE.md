@@ -46,6 +46,6 @@ GitHub に公開するため、以下をリポジトリのファイル・コミ�
 - 退室: `[Behaviour] OnLeftRoom`（`OnPlayerLeftRoom` は別物）
 - ユーザー: `[Behaviour] OnPlayerJoined <name> (usr_...)` / `OnPlayerLeft <name> (usr_...)`、自分は `User Authenticated: <name> (usr_...)`
 - 動画: `[Video Playback] Attempting to resolve URL '<url>'`
-- インバイト: `Received Notification: <Notification from username:<name>, sender user id:usr_... to usr_... of type: invite|requestInvite, id: not_..., created at: MM/dd/yyyy HH:mm:ss UTC, details: {{worldId=..., worldName=...}}, ..., message: "...">`。ログインのたびに過去の通知が出し直されるため `NotificationId` で重複排除し、日時は created at（UTC→ローカル）を使う。requestInvite は 2026-10 時点で実ログ未確認（invite と同じ形式と想定）
+- インバイト: `Received Notification: <Notification from username:<name>, sender user id:usr_... to usr_... of type: invite|requestInvite, id: not_..., created at: MM/dd/yyyy HH:mm:ss UTC, details: {{worldId=..., worldName=...}}, ..., message: "...">`。ログインのたびに過去の通知が出し直されるため `NotificationId` で重複排除し、日時は created at（UTC→ローカル）を使う。requestInvite は 2026-10 時点で実ログ未確認（invite と同じ形式と想定）。自分がリクエストインバイトを送って相手が承諾した場合、自分のログには通常の invite として届く（requestInvite が届くのはお願いされた側のみ）。自分が送ったインバイトは `[API] Send notification:<...of type: invite...>` として残るが、現在は取り込んでいない
 - `[API]` 行にユーザー/ワールドの詳細 JSON は出力されなくなっている
 - VRChat 起動中は最新ログが書き込み中のため、`FileShare.ReadWrite` で開く必要がある（旧リリース版はこれが原因で落ちていた）

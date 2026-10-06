@@ -1,6 +1,6 @@
 # 変更履歴
 
-## v2.0.0（未リリース）
+## v2.0.0（2026-10-07）
 
 sechiro 氏の [VRCLogAnalyzer](https://github.com/sechiro/VRCLogAnalyzer) v1.0.0 をもとにした fork 版の最初のリリースです。
 

@@ -1,5 +1,11 @@
 # 変更履歴
 
+## 未リリース
+
+- 配布用 zip に README の PDF（README.md から自動作成）を同梱
+- README の画面イメージを v2 の画面に差し替え
+- GitHub Actions の各アクションを Node.js 24 対応版に更新
+
 ## v2.0.0（2026-10-07）
 
 sechiro 氏の [VRCLogAnalyzer](https://github.com/sechiro/VRCLogAnalyzer) v1.0.0 をもとにした fork 版の最初のリリースです。

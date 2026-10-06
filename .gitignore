@@ -358,3 +358,6 @@ output_log_*.txt
 
 # 配布用ビルドの設定は GitHub Actions でも使うので管理対象にする（上の *.pubxml の除外を打ち消す）
 !src/VRCLogAnalyzer/Properties/PublishProfiles/win-x64.pubxml
+
+# README.pdf は配布時に tools/make_readme_pdf.py で README.md から作る
+/README.pdf

@@ -98,6 +98,7 @@ dotnet test
 dotnet publish src/VRCLogAnalyzer -c Release -p:PublishProfile=win-x64 -o artifacts/publish
 ```
 
+- 配布用 zip には README.md から作った `README.pdf` を同梱します（`tools/make_readme_pdf.py`。Microsoft Edge か Google Chrome が必要）。
 - 配布用ビルドの設定は `src/VRCLogAnalyzer/Properties/PublishProfiles/win-x64.pubxml`（ランタイム同梱・exe 1 つ）。GitHub Actions も同じ設定でビルドします。
 - GitHub Actions（`.github/workflows/build.yml`）: main への push でビルドとテスト、`v` で始まるタグ（例: `v2.0.0`）の push で zip を添付した Release を下書きで作成します。
 
